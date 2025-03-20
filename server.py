@@ -9,16 +9,19 @@ app = Flask(__name__)
 BOT_TOKEN = os.getenv("BOT_TOKEN", "7214027935:AAFQ3JP7nRTihzIjJKRT8yRjJBESENHibJ4")
 TELEGRAM_API_URL = f"https://api.telegram.org/bot{BOT_TOKEN}"
 
-# Logging
+# Logging setup
 logging.basicConfig(level=logging.INFO)
+logging.info("🚀 Telegram Stars Payment Server is Starting...")
 
 @app.route('/')
 def home():
+    logging.info("✅ Home route accessed")
     return "🚀 Telegram Stars Payment Server is Running!"
 
 # Create an Invoice
 @app.route('/create-invoice', methods=['POST'])
 def create_invoice():
+    logging.info("💰 Invoice request received")
     data = request.json
     user_id = data.get("user_id")
 
@@ -35,13 +38,16 @@ def create_invoice():
     invoice_data = response.json()
 
     if invoice_data.get("ok"):
+        logging.info("✅ Invoice created successfully")
         return jsonify({"invoice_url": invoice_data["result"]})
     else:
+        logging.error(f"❌ Invoice creation failed: {invoice_data}")
         return jsonify({"error": "Failed to create invoice", "details": invoice_data}), 500
 
 # Handle Successful Payment
 @app.route('/payment-webhook', methods=['POST'])
 def payment_webhook():
+    logging.info("🔔 Payment webhook received")
     update = request.json
 
     if "message" in update and "successful_payment" in update["message"]:
@@ -59,8 +65,10 @@ def payment_webhook():
 
         return jsonify({"status": "success", "coins_added": coins_to_add})
     
+    logging.warning("⚠️ Invalid payment update received")
     return jsonify({"status": "error", "message": "Invalid payment update"}), 400
 
 if __name__ == "__main__":
     PORT = int(os.environ.get("PORT", 10000))  # Use Render's dynamic port
-    app.run(host="0.0.0.0", port=PORT)
+    logging.info(f"🌍 Starting Flask server on port {PORT}...")
+    app.run(host="0.0.0.0", port=PORT, debug=True)
