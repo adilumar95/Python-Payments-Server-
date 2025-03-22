@@ -2,3 +2,4 @@ flask
 requests
 gunicorn
 logging
+flask_cors
