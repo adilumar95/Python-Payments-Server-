@@ -3,8 +3,10 @@ import logging
 import requests
 import uuid  # 🔹 For generating unique payment IDs
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)  # ✅ Add this to enable cross-origin access
 
 # Telegram Bot Token
 BOT_TOKEN = os.getenv("BOT_TOKEN", "7214027935:AAFQ3JP7nRTihzIjJKRT8yRjJBESENHibJ4")
