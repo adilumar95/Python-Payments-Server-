@@ -33,7 +33,7 @@ def create_invoice():
 
     invoice_payload = {
         "title": "Buy Game Coins",
-        "description": "Purchase 1000 coins using Telegram Stars",
+        "description": "Purchase 5000 coins using Telegram Stars",
         "payload": "buy_1000_coins",  # Static payload (not used for identifying user)
         "provider_token": "",  # Empty for Telegram Stars
         "currency": "XTR",
